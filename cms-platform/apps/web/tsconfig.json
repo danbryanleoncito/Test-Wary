@@ -5,7 +5,9 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   },
   "include": [
     "**/*.ts",
