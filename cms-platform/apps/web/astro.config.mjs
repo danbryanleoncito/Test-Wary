@@ -25,10 +25,5 @@ export default defineConfig({
   server: {
     port: 4321,
     host: true
-  },
-
-  experimental: {
-    // Enable hybrid rendering for mixing static and dynamic pages
-    hybridOutput: true
   }
 });
