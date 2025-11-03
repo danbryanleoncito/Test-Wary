@@ -1,0 +1,395 @@
+/* Share Buttons Styles */
+.share-buttons {
+  padding: 1.5rem 0;
+}
+
+.share-buttons h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.share-buttons .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.share-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.share-btn.twitter:hover {
+  background: #1da1f2;
+  color: white;
+  border-color: #1da1f2;
+}
+
+.share-btn.facebook:hover {
+  background: #4267b2;
+  color: white;
+  border-color: #4267b2;
+}
+
+.share-btn.linkedin:hover {
+  background: #0077b5;
+  color: white;
+  border-color: #0077b5;
+}
+
+.share-btn.copy.copied {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+}
+
+/* Comments Styles */
+.comments {
+  margin-top: 3rem;
+}
+
+.comments h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.comment-form {
+  margin-bottom: 2rem;
+}
+
+.comment-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  margin-bottom: 0.75rem;
+}
+
+.comment-form button {
+  padding: 0.75rem 1.5rem;
+  background: rgb(136, 58, 234);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.comment-form button:hover:not(:disabled) {
+  background: rgb(109, 40, 217);
+}
+
+.comment-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.comment {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: #111827;
+}
+
+.comment-date {
+  color: #6b7280;
+}
+
+.comment-text {
+  color: #374151;
+  line-height: 1.6;
+}
+
+.no-comments {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem;
+}
+
+/* Dashboard Styles */
+.dashboard {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.metric-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card.live {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+}
+
+.metric-icon {
+  font-size: 2rem;
+}
+
+.metric-content h3 {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 0.5rem 0;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: #111827;
+}
+
+.metric-detail {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.popular-articles h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.articles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.popular-article {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.article-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.article-info h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.views {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.article-chart {
+  background: #f3f4f6;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.chart-bar {
+  height: 100%;
+  background: linear-gradient(90deg, rgb(136, 58, 234) 0%, rgb(109, 40, 217) 100%);
+  transition: width 0.3s;
+}
+
+/* Editor Styles */
+.editor-container {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.editor-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.auto-save-status {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.save-button {
+  padding: 0.5rem 1.25rem;
+  background: rgb(136, 58, 234);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.save-button:hover:not(:disabled) {
+  background: rgb(109, 40, 217);
+}
+
+.save-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.toolbar-btn {
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toolbar-btn:hover {
+  background: #f3f4f6;
+}
+
+.editor-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 600px;
+}
+
+.editor-pane,
+.preview-pane {
+  padding: 1.5rem;
+}
+
+.editor-pane {
+  border-right: 1px solid #e5e7eb;
+}
+
+.editor-pane label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.title-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.editor-textarea {
+  width: 100%;
+  min-height: 400px;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.875rem;
+  resize: vertical;
+}
+
+.preview-pane h3 {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0 0 1rem 0;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.preview-content {
+  line-height: 1.75;
+}
+
+@media (max-width: 768px) {
+  .editor-main {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-pane {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+}

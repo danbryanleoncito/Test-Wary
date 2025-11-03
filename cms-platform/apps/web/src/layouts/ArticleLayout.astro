@@ -1,0 +1,103 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { Article } from '@repo/shared';
+import { formatDate, calculateReadingTime } from '@repo/shared';
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+const readingTime = calculateReadingTime(article.content);
+---
+
+<BaseLayout title={article.title} seo={article.seo}>
+  <div class="article-layout">
+    <header class="article-header">
+      <div class="container">
+        <h1>{article.title}</h1>
+        <div class="article-meta">
+          <div class="author">
+            {article.author.avatar && (
+              <img src={article.author.avatar} alt={article.author.name} class="avatar" />
+            )}
+            <span>{article.author.name}</span>
+          </div>
+          <div class="date">
+            {article.publishedAt && formatDate(article.publishedAt)}
+          </div>
+          <div class="reading-time">
+            {readingTime} min read
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="article-content">
+      <div class="container">
+        <slot />
+      </div>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .article-layout {
+    max-width: 100%;
+  }
+
+  .article-header {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--gray-light);
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 1rem 0;
+    color: var(--gray-dark);
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+
+  .author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+
+  .article-content {
+    padding: 3rem 0;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .article-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+</style>
