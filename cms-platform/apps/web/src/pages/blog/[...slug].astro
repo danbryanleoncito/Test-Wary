@@ -1,0 +1,166 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import Comments from '../../components/react/Comments';
+import ShareButtons from '../../components/react/ShareButtons';
+import { apiClient } from '../../lib/api';
+
+export const prerender = false; // Disable prerendering for dynamic content
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/404');
+}
+
+let article;
+try {
+  article = await apiClient.getArticleBySlug(slug);
+} catch (error) {
+  console.error('Failed to fetch article:', error);
+  return Astro.redirect('/404');
+}
+
+if (!article) {
+  return Astro.redirect('/404');
+}
+---
+
+<ArticleLayout article={article}>
+  <article class="article">
+    {article.featuredImage && (
+      <img
+        src={article.featuredImage}
+        alt={article.title}
+        class="featured-image"
+      />
+    )}
+
+    <div class="content" set:html={article.content} />
+
+    {article.tags && article.tags.length > 0 && (
+      <div class="tags">
+        {article.tags.map((tag) => (
+          <a href={`/blog?tag=${tag.slug}`} class="tag">
+            #{tag.name}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <!-- React Island: Share Buttons - Loads when visible -->
+    <div class="share-section">
+      <ShareButtons
+        client:visible
+        url={Astro.url.href}
+        title={article.title}
+      />
+    </div>
+
+    <!-- React Island: Comments - Loads when idle -->
+    <div class="comments-section">
+      <Comments
+        client:idle
+        articleId={article.id}
+        apiUrl={import.meta.env.PUBLIC_API_URL}
+      />
+    </div>
+  </article>
+</ArticleLayout>
+
+<style>
+  .article {
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+
+  .featured-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .content {
+    margin-bottom: 3rem;
+  }
+
+  .content :global(h2) {
+    font-size: 1.875rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem 0;
+  }
+
+  .content :global(h3) {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem 0;
+  }
+
+  .content :global(p) {
+    margin: 1rem 0;
+  }
+
+  .content :global(a) {
+    color: rgb(var(--accent));
+    text-decoration: underline;
+  }
+
+  .content :global(code) {
+    background: #f3f4f6;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9em;
+  }
+
+  .content :global(pre) {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  .content :global(pre code) {
+    background: transparent;
+    padding: 0;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--gray-light);
+  }
+
+  .tag {
+    background: rgb(var(--accent-light));
+    color: rgb(var(--accent-dark));
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .tag:hover {
+    background: rgb(var(--accent));
+    color: white;
+  }
+
+  .share-section {
+    margin: 3rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--gray-light);
+    border-bottom: 1px solid var(--gray-light);
+  }
+
+  .comments-section {
+    margin-top: 3rem;
+  }
+</style>

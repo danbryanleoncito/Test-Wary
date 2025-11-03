@@ -1,0 +1,218 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model with authentication
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(VIEWER)
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  articles        Article[]
+  comments        Comment[]
+  mediaUploads    Media[]
+  contentVersions ContentVersion[]
+  reactions       CommentReaction[]
+  refreshTokens   RefreshToken[]
+  analytics       AnalyticsEvent[]
+
+  @@index([email])
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  AUTHOR
+  VIEWER
+}
+
+// Refresh tokens for JWT authentication
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+  @@map("refresh_tokens")
+}
+
+// Article/Content model
+model Article {
+  id             String        @id @default(cuid())
+  title          String
+  slug           String        @unique
+  content        String        @db.Text
+  excerpt        String?       @db.Text
+  status         ContentStatus @default(DRAFT)
+  publishedAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  viewCount      Int           @default(0)
+  version        Int           @default(1)
+  featuredImage  String?
+
+  // SEO fields
+  seoTitle       String?
+  seoDescription String?       @db.Text
+  seoKeywords    String[]
+  ogImage        String?
+  canonicalUrl   String?
+
+  // Relations
+  authorId       String
+  author         User            @relation(fields: [authorId], references: [id])
+  tags           Tag[]
+  comments       Comment[]
+  versions       ContentVersion[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([authorId])
+  @@index([publishedAt])
+  @@map("articles")
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// Tag model for categorization
+model Tag {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  articles  Article[]
+
+  @@index([slug])
+  @@map("tags")
+}
+
+// Content versioning for tracking changes
+model ContentVersion {
+  id          String   @id @default(cuid())
+  contentId   String
+  article     Article  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  version     Int
+  data        Json
+  changeLog   String?  @db.Text
+  createdAt   DateTime @default(now())
+  publishedAt DateTime?
+
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+
+  @@unique([contentId, version])
+  @@index([contentId])
+  @@map("content_versions")
+}
+
+// Media/File uploads
+model Media {
+  id           String   @id @default(cuid())
+  url          String
+  filename     String
+  mimeType     String
+  size         Int
+  width        Int?
+  height       Int?
+  alt          String?
+  caption      String?  @db.Text
+  createdAt    DateTime @default(now())
+
+  uploadedById String
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id])
+
+  @@index([uploadedById])
+  @@index([mimeType])
+  @@map("media")
+}
+
+// Comments with nested replies
+model Comment {
+  id          String    @id @default(cuid())
+  text        String    @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isModerated Boolean   @default(false)
+
+  // Relations
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id])
+
+  articleId   String
+  article     Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  parentId    String?
+  parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies     Comment[] @relation("CommentReplies")
+
+  reactions   CommentReaction[]
+
+  @@index([articleId])
+  @@index([authorId])
+  @@index([parentId])
+  @@map("comments")
+}
+
+// Comment reactions (like, love, etc.)
+model CommentReaction {
+  id        String       @id @default(cuid())
+  type      ReactionType
+  createdAt DateTime     @default(now())
+
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  commentId String
+  comment   Comment      @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId, type])
+  @@index([commentId])
+  @@map("comment_reactions")
+}
+
+enum ReactionType {
+  LIKE
+  LOVE
+  INSIGHTFUL
+}
+
+// Analytics events for tracking
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  type      String
+  metadata  Json
+  createdAt DateTime @default(now())
+
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+
+  articleId String?
+
+  @@index([type])
+  @@index([createdAt])
+  @@index([articleId])
+  @@map("analytics_events")
+}

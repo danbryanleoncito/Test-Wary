@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { apiClient } from '../lib/api';
+
+// Fetch articles on the server
+const articles = await apiClient.getArticles({
+  status: 'published',
+  page: 1,
+  pageSize: 10
+});
+---
+
+<BaseLayout title="Home - CMS Platform">
+  <div class="homepage">
+    <header class="hero">
+      <div class="container">
+        <h1>Enterprise Content Management Platform</h1>
+        <p>A modern, high-performance CMS built with Next.js, Astro, and React</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="articles-section">
+        <h2>Latest Articles</h2>
+        <div class="articles-grid">
+          {articles.data.map((article) => (
+            <article class="article-card">
+              {article.featuredImage && (
+                <img src={article.featuredImage} alt={article.title} class="featured-image" />
+              )}
+              <div class="article-card-content">
+                <h3>
+                  <a href={`/blog/${article.slug}`}>{article.title}</a>
+                </h3>
+                <p class="excerpt">{article.excerpt}</p>
+                <div class="article-footer">
+                  <span class="author">{article.author.name}</span>
+                  <span class="date">
+                    {article.publishedAt && new Date(article.publishedAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .homepage {
+    min-height: 100vh;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, rgb(var(--accent)) 0%, rgb(var(--accent-dark)) 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+  }
+
+  .hero p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .articles-section {
+    padding: 4rem 0;
+  }
+
+  .articles-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  .article-card {
+    border: 1px solid var(--gray-light);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .article-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .featured-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .article-card-content {
+    padding: 1.5rem;
+  }
+
+  .article-card h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.25rem;
+  }
+
+  .article-card h3 a {
+    color: var(--gray-dark);
+    text-decoration: none;
+  }
+
+  .article-card h3 a:hover {
+    color: rgb(var(--accent));
+  }
+
+  .excerpt {
+    color: #6b7280;
+    margin: 0 0 1rem 0;
+    line-height: 1.6;
+  }
+
+  .article-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: #9ca3af;
+  }
+
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2rem;
+    }
+
+    .hero p {
+      font-size: 1rem;
+    }
+
+    .articles-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

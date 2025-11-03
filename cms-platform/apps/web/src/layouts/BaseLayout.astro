@@ -1,0 +1,75 @@
+---
+import type { SEOMetadata } from '@repo/shared';
+
+interface Props {
+  title: string;
+  description?: string;
+  seo?: Partial<SEOMetadata>;
+}
+
+const { title, description, seo } = Astro.props;
+
+const pageTitle = seo?.title || title;
+const pageDescription = seo?.description || description || 'Enterprise Content Management Platform';
+const ogImage = seo?.ogImage || '/og-default.jpg';
+const canonicalUrl = seo?.canonicalUrl || Astro.url.href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={pageDescription} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO -->
+    <title>{pageTitle}</title>
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {seo?.keywords && seo.keywords.length > 0 && (
+      <meta name="keywords" content={seo.keywords.join(', ')} />
+    )}
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --accent: 136, 58, 234;
+    --accent-light: 224, 204, 250;
+    --accent-dark: 49, 10, 101;
+    --gray-light: 229, 231, 235;
+    --gray-dark: 31, 41, 55;
+  }
+
+  html {
+    font-family: system-ui, sans-serif;
+    background: #ffffff;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+</style>
